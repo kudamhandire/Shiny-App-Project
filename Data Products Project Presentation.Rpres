@@ -1,0 +1,65 @@
+Data Products Project Presentation
+========================================================
+author: Kudakwashe Mhandire
+date: 03-04-2020
+autosize: true
+
+Introduction
+========================================================
+
+This shinyApp allows the user to:
+
+- Visualise the distribution of continuous variables in a data set
+- Add as many of the variables as possible
+- Adjust the histogram as more vectors are being added to the dataset.
+
+Here is a github link to the ui.R and server.R files:
+https://github.com/kudamhandire/Shiny-App-Project.git
+
+User interface
+========================================================
+This user interface (ui) builds the page, inserts the input and output widgets.
+```{r}
+library(shiny)
+data(mtcars)
+ui <- fluidPage(
+  titlePanel("Vehicle Description"),
+  # Page layout and input widget
+  sidebarLayout( 
+    sidebarPanel( 
+      selectInput(# Input the variables that will be selected for visualisation
+        "variable", label = h3("Choose Variable"), 
+                  choices = list("Horse Power" = "hp", 
+                                 "Miles per gallon" = "mpg", 
+                                 "Weight" = "wt", 
+                                 "Displacement"="disp"),
+                  selected = 1)
+    ),
+# Creates space for the histogram plot on the application page.    
+mainPanel(
+      plotOutput("Plot1")
+    )
+  )
+)
+```
+
+Server
+========================================================
+This easy server syntax provides the codes that build the histogram in response to the choices selected using the input widget.
+```{r}
+library(shiny)
+server <- function(input, output) {
+    # Create histogram by accessing the reactive input variable (inout$variable) and passing it on to the output plot (plot1)
+    output$Plot1 <- renderPlot({ 
+        x  <-   mtcars[, input$variable] 
+        hist(x, col = 'coral', border = 'black', xlab=input$variable,
+             main="Histogram of motor vehicle characteristics")
+    })
+}
+```
+
+Try it
+========================================================
+The application syntax can be tweaked for use with other datasets since histograms form the first port of call for data visualisation.
+
+THANKS!!!
